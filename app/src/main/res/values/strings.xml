@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">MyFoursquare</string>
+
+    <!--  Menu item  -->
+    <string name="search_venue">Search Venue</string>
+
+    <!--  Hints  -->
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="key_word">coffee..square..theater</string>
 </resources>
