@@ -67,11 +67,14 @@ public class VenueAdapter extends ArrayAdapter<Venue> {
 
         holder.displayVenueName.setText(venues.get(position).getName());
         holder.displayVenueAddress.setText(venues.get(position).getAddress());
-        holder.displayVenueLocation.setText(venues.get(position).getCity() + ", " +
+
+        String location = venues.get(position).getCity() + ", " +
                 venues.get(position).getState() + ", " +
-                venues.get(position).getCountry());
+                venues.get(position).getCountry();
+
+        holder.displayVenueLocation.setText(location);
         holder.displayVenueCategory.setText(venues.get(position).getCategoryName());
-        holder.displayVenueHereNow.setText(venues.get(position).getHereNow());
+        holder.displayVenueHereNow.setText("People here: " + String.valueOf(venues.get(position).getHereNow()));
 
         return v;
     }

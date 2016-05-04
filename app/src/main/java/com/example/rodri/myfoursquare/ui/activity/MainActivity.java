@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         initialize();
         initializeCustomComponents();
 
+        new AsyncTaskParseJSON().execute();
+
     }
 
     private void initialize() {
@@ -121,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 latitude = Double.parseDouble(etLat.getText().toString());
                 longitude = Double.parseDouble(etLon.getText().toString());
                 keyword = etKeyWord.getText().toString();
+
+                new AsyncTaskParseJSON().execute();
             }
         });
 
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
     public class AsyncTaskParseJSON extends AsyncTask<String, Integer, ArrayList<Venue>> {
 
         JSONArray venueJsonArray;
-        ArrayList<Venue> venueList;
+        ArrayList<Venue> venueList = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {
@@ -143,27 +147,29 @@ public class MainActivity extends AppCompatActivity {
             try {
 
                 RemoteFetch remoteFetch = new RemoteFetch();
-                JSONObject json = remoteFetch.getJSON(MainActivity.this, latitude, longitude, keyword);
+                JSONObject json = remoteFetch.getJSON(MainActivity.this, 40.7, -74, "coffee");
+
 
                 venueJsonArray = json.getJSONObject("response").getJSONArray("venues");
 
                 for (int i = 0; i < venueJsonArray.length(); i++) {
+                    System.out.println("I've been here!");
                     JSONObject object = venueJsonArray.getJSONObject(i);
                     Venue venue = new Venue();
 
                     venue.setName(object.getString("name"));
-                    venue.setAddress(object.getJSONObject("location").getString("address"));
-                    venue.setCategoryName(object.getJSONObject("categories").getString("shortName"));
-                    venue.setCity(object.getJSONObject("location").getString("city"));
-                    venue.setState(object.getJSONObject("location").getString("state"));
-                    venue.setCountry(object.getJSONObject("location").getString("country"));
-                    venue.setHereNow(object.getJSONObject("hereNow").getInt("count"));
+                    venue.setAddress(object.getJSONObject("location").optString("address"));
+                    venue.setCategoryName(object.getJSONArray("categories").getJSONObject(0).optString("shortName"));
+                    venue.setCity(object.getJSONObject("location").optString("city"));
+                    venue.setState(object.getJSONObject("location").optString("state"));
+                    venue.setCountry(object.getJSONObject("location").optString("country"));
+                    venue.setHereNow(object.getJSONObject("hereNow").optInt("count"));
 
                     venueList.add(venue);
                 }
 
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
 
             return venueList;
@@ -173,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<Venue> result) {
             super.onPostExecute(result);
 
-            // Set the custom Adapter right here!!!
+            venueAdapter = new VenueAdapter(MainActivity.this, 0, venueList);
+            listVenues.setAdapter(venueAdapter);
         }
     }
 

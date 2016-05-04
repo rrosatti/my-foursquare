@@ -17,12 +17,14 @@ public class RemoteFetch {
 
     private static final String CLIENT_ID = "4MHKT0WWVGFWSXJZL5TBM4DRNKXW1SVLHXPR1OFN4ARDVKZ0";
     private static final String CLIENT_SECRET = "2JXYIWMFGLA0VTPMD3I4K01KIWDMHXJCJGZL0FFAHRAJILUT";
+    private static final String VERSION = "20130815";
+    private static final String LIMIT = "5";
     private static final String OPEN_SEARCH_FOURSQUARE_API = "https://api.foursquare.com/v2/venues/search?client_id="
-            + CLIENT_ID + "&client_secret=" + CLIENT_SECRET;
+            + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&v=" + VERSION + "&limit=" + LIMIT;
 
     public JSONObject getJSON(Context context, double lat, double lon, String query) {
         String stringURL = OPEN_SEARCH_FOURSQUARE_API;
-        stringURL += "&ll="+ lat + "," + lon + "&query=" + query;
+        stringURL += "&ll=" + lat + "," + lon + "&query=" + query;
 
         try {
             URL url = new URL(stringURL);
@@ -36,6 +38,8 @@ public class RemoteFetch {
                 json.append(tmp).append("\n");
             }
             reader.close();
+
+            System.out.println(json.toString());
 
             JSONObject data = new JSONObject(json.toString());
 
