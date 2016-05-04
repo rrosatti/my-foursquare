@@ -11,6 +11,7 @@ public class Venue {
     private String state;
     private String country;
     private String categoryName;
+    private int hereNow;
 
     public void setName(String name) {
         this.name = name;
@@ -39,8 +40,6 @@ public class Venue {
     public void setHereNow(int hereNow) {
         this.hereNow = hereNow;
     }
-
-    private int hereNow;
 
     public String getAddress() {
         return address;

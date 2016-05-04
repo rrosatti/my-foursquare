@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.rodri.myfoursquare.R;
 import com.example.rodri.myfoursquare.json.RemoteFetch;
 import com.example.rodri.myfoursquare.location.Venue;
+import com.example.rodri.myfoursquare.ui.adapter.VenueAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Venue> venues;
     ListView listVenues;
     RemoteFetch remoteFetch;
+    VenueAdapter venueAdapter;
 
     EditText etLat;
     EditText etLon;
@@ -150,8 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     Venue venue = new Venue();
 
                     venue.setName(object.getString("name"));
-                    venue.setAddress(object.getJSONObject("location").getString("address") + ","
-                            + object.getJSONObject("location").getString("crossStreet"));
+                    venue.setAddress(object.getJSONObject("location").getString("address"));
                     venue.setCategoryName(object.getJSONObject("categories").getString("shortName"));
                     venue.setCity(object.getJSONObject("location").getString("city"));
                     venue.setState(object.getJSONObject("location").getString("state"));
