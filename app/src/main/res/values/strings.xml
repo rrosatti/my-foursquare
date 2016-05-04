@@ -8,4 +8,10 @@
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
     <string name="key_word">coffee..square..theater</string>
+
+    <!--  Toast messages  -->
+    <string name="latitude_empty">Latitude field can\'t be empty!</string>
+    <string name="longitude_empty">Longitude field can\'t be empty!</string>
+    <string name="keyword_empty">Keyword field can\'t be empty!</string>
+
 </resources>
