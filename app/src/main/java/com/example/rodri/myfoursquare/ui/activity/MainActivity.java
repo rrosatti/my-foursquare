@@ -20,6 +20,9 @@ import com.example.rodri.myfoursquare.R;
 import com.example.rodri.myfoursquare.json.RemoteFetch;
 import com.example.rodri.myfoursquare.location.Venue;
 import com.example.rodri.myfoursquare.ui.adapter.VenueAdapter;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     double latitude, longitude;
     String keyword;
 
+    private int PLACE_PICKER_REQUEST = 1;
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         initializeCustomComponents();
 
         new AsyncTaskParseJSON().execute();
+
+
 
     }
 
@@ -85,8 +95,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menuSearch) {
             //showInputDialog();
-            Intent showMaps = new Intent(MainActivity.this, MapsActivity.class);
-            startActivity(showMaps);
+
+            /*Intent showMaps = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(showMaps);*/
+
+            try {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                Intent intent = builder.build(this);
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
