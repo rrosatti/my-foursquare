@@ -39,7 +39,7 @@ public class RemoteFetch {
             }
             reader.close();
 
-            System.out.println(json.toString());
+            //System.out.println(json.toString());
 
             JSONObject data = new JSONObject(json.toString());
 
