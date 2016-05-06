@@ -1,12 +1,11 @@
 package com.example.rodri.myfoursquare.ui.adapter;
 
-import android.app.Activity;
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rodri.myfoursquare.R;
 import com.example.rodri.myfoursquare.location.Venue;
@@ -14,69 +13,61 @@ import com.example.rodri.myfoursquare.location.Venue;
 import java.util.ArrayList;
 
 /**
- * Created by rodri on 5/4/2016.
+ * Created by rodri on 5/6/2016.
  */
-public class VenueAdapter extends ArrayAdapter<Venue> {
+public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.MyViewHolder> {
 
-    private Activity activity;
-    private LayoutInflater inflater = null;
     private ArrayList<Venue> venues;
 
-    public VenueAdapter(Activity activity, int textViewSourceId, ArrayList<Venue> venues) {
-        super(activity, textViewSourceId, venues);
-        try {
-            this.activity = activity;
-            this.venues = venues;
 
-            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView name, address, location, category, hereNow;
+
+        public MyViewHolder(View view) {
+            super(view);
+            view.setClickable(true);
+            view.setOnClickListener(this);
+            name = (TextView) view.findViewById(R.id.txtVenueName);
+            address = (TextView) view.findViewById(R.id.txtVenueAddress);
+            location = (TextView) view.findViewById(R.id.txtVenueLocation);
+            category = (TextView) view.findViewById(R.id.txtVenueCategory);
+            hereNow = (TextView) view.findViewById(R.id.txtVenueHereNow);
+
+
         }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(v.getContext(), venues.get(getPosition()).getName(), Toast.LENGTH_LONG).show();
+        }
+
+
+
+    }
+
+    public VenueAdapter(ArrayList<Venue> venues) {
+        this.venues = venues;
     }
 
     @Override
-    public int getCount() {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_venue_item, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        Venue venue = venues.get(position);
+        holder.name.setText(venue.getName());
+        holder.address.setText(venue.getAddress());
+        holder.location.setText(venue.getCity() + ", " + venue.getState() + ", " + venue.getCountry());
+        holder.category.setText(venue.getCategoryName());
+        holder.hereNow.setText(String.valueOf(venue.getHereNow()));
+    }
+
+    @Override
+    public int getItemCount() {
         return venues.size();
     }
-
-    public class ViewHolder {
-        public TextView displayVenueName;
-        public TextView displayVenueAddress;
-        public TextView displayVenueLocation;
-        public TextView displayVenueCategory;
-        public TextView displayVenueHereNow;
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        ViewHolder holder = new ViewHolder();
-        if (convertView == null) {
-            v = inflater.inflate(R.layout.custom_venue_item, null);
-
-            holder.displayVenueName = (TextView) v.findViewById(R.id.txtVenueName);
-            holder.displayVenueAddress = (TextView) v.findViewById(R.id.txtVenueAddress);
-            holder.displayVenueLocation = (TextView) v.findViewById(R.id.txtVenueLocation);
-            holder.displayVenueCategory = (TextView) v.findViewById(R.id.txtVenueCategory);
-            holder.displayVenueHereNow = (TextView) v.findViewById(R.id.txtVenueHereNow);
-
-            v.setTag(holder);
-        } else {
-            holder = (ViewHolder) v.getTag();
-        }
-
-        holder.displayVenueName.setText(venues.get(position).getName());
-        holder.displayVenueAddress.setText(venues.get(position).getAddress());
-
-        String location = venues.get(position).getCity() + ", " +
-                venues.get(position).getState() + ", " +
-                venues.get(position).getCountry();
-
-        holder.displayVenueLocation.setText(location);
-        holder.displayVenueCategory.setText(venues.get(position).getCategoryName());
-        holder.displayVenueHereNow.setText("People here: " + String.valueOf(venues.get(position).getHereNow()));
-
-        return v;
-    }
-
 }
